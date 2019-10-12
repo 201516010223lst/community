@@ -16,6 +16,7 @@ import java.io.IOException;
  */
 @Component
 public class GithubProvider {
+    /*获取GitHub app的access_token*/
     public String getAccessToken(AccessTokenDTO accessTokenDTO){
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -26,6 +27,7 @@ public class GithubProvider {
                     .build();
             try (Response response = client.newCall(request).execute()) {
                 String string = response.body().string();
+                /*string获取的就是access_token*/
                 /*System.out.println(string);*/
                 String token = string.split("&")[0].split("=")[1];
                 /* System.out.println(token);*/
