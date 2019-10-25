@@ -1,15 +1,27 @@
 ##  码匠社区
 
 ##  资料
-[github app]https://developer.github.com/apps/building-github-apps/creating-a-github-app/GIT
+[github app](https://developer.github.com/apps/building-github-apps/creating-a-github-app/GIT)
 [Spring](https://docs.spring.io/spring-boot/docs/2.0.0.RC1/reference/htmlsingle/#boot-features-embedded-database-support)
 
 ##  工具
 
-##  spring.datasource.url=jdbc:h2:~/community;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
-    spring.datasource.username=sa
-    spring.datasource.password=123
+##  sql
+```H2连接
+    spring.datasource.url=jdbc:h2:~/community;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+    spring.datasource.username=root
+    spring.datasource.password=123456
     spring.datasource.driver-class-name=org.h2.Driver
+```
+```msyql
+    spring.datasource.url=jdbc:mysql://localhost:3306/community?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8
+    spring.datasource.username=root
+    spring.datasource.password=123456
+    spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
+```
+```sql
+    
+```
 
 
