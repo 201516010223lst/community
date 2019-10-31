@@ -1,15 +1,16 @@
-package com.springboot.community.model;
+package com.springboot.community.dto;
 
+import com.springboot.community.model.User;
 import lombok.Data;
 
 /**
- * @Classname Question
+ * @Classname QuestionDTO
  * @Description TODO
- * @Date 2019/10/28 15:34
+ * @Date 2019/10/30 9:38
  * @Created by 猪刚鬣·李
  */
 @Data
-public class Question {
+public class QuestionDTO {
     private Integer id;//问题id
     private String title;//问题标题
     private String description;//问题描述
@@ -20,4 +21,5 @@ public class Question {
     private Integer viewCount;//浏览数量
     private Integer commentCount;//阅读数量
     private Integer likeCount;//关注数量
+    private User user;
 }

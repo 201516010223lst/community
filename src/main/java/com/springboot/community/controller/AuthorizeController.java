@@ -22,8 +22,9 @@ import java.util.UUID;
  * @Date 2019/10/12 11:33
  * @Created by 猪刚鬣·李
  */
+//用户登录控制层
 @Controller
-public class authorizeController {
+public class AuthorizeController {
     /*自动识别spring容器*/
     @Autowired
     private GithubProvider githubProvider;
@@ -44,7 +45,7 @@ public class authorizeController {
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
                            HttpServletRequest request,
-                           HttpServletResponse response){
+                           HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
         accessTokenDTO.setClient_secret(clientSecret);
@@ -53,8 +54,8 @@ public class authorizeController {
         accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        if(githubUser!=null){
-            User user=new User();
+        if ((githubUser != null) && (githubUser.getId() != null)) {
+            User user = new User();
             //获取用户信息，随机生成一个token
             //放到user对象存进数据库
             String token = UUID.randomUUID().toString();
@@ -63,16 +64,17 @@ public class authorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatarUrl());
             userMapper.insert(user);
 //            System.out.println(user);
             //user不为空，登录成功,写cookie和session
             //自动写入cookie
-            response.addCookie(new Cookie("token",token));
+            response.addCookie(new Cookie("token", token));
             //手动写入cookie
 //            request.getSession().setAttribute("githubUser",githubUser);
 //            System.out.println(githubUser);
-             return "redirect:/";
-        }else{
+            return "redirect:/";
+        } else {
             //登陆失败，重新登录
             return "redirect:/";
         }
