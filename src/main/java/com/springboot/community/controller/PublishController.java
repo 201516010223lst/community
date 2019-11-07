@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -67,7 +66,7 @@ public class PublishController {
             return "publish";
         }
         /*判断用户是否登录*/
-        User user = null;
+      /*  User user = null;
         //获取cookie，循环cookie是否找到自定义的token
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0) {//先判断cookies是否为空，否则会报空指针错误
@@ -87,7 +86,8 @@ public class PublishController {
                     break;
                 }
             }
-        }
+        }*/
+        User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";

@@ -40,17 +40,38 @@
 
 ```
 ```sql
-    create table user
-    (
-        id int auto_increment,
-        account_id varchar(100),
-        name varchar(50),
-        token char(36),
-        gmt_create bigint,
-        gmt_modified bigint,
-        constraint user_pk
-            primary key (id)
-    );  
+create table USER
+(
+    ID           INTEGER default (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_23FB365F_C1FC_42A9_A6F0_96AC7F03D1F7) auto_increment,
+    ACCOUNT_ID   VARCHAR(100),
+    NAME         VARCHAR(50),
+    TOKEN        CHAR(36),
+    GMT_CREATE   BIGINT,
+    GMT_MODIFIED BIGINT,
+    BIO          VARCHAR(256),
+    AVATAR_URL   VARCHAR(100),
+    constraint USER_PK
+        primary key (ID)
+);
+```
+```sql
+create table QUESTION
+(
+    ID            INTEGER default (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_0EDC1B2F_FC9C_4B44_A940_697361626482) auto_increment,
+    TITLE         VARCHAR(50),
+    DESCRIPTION   CLOB,
+    GMT_CREATE    BIGINT,
+    GMT_MODIFIED  BIGINT,
+    CREATOR       INTEGER,
+    COMMENT_COUNT INTEGER default 0,
+    VIEW_COUNT    INTEGER default 0,
+    LIKE_COUNT    INTEGER default 0,
+    TAG           VARCHAR(256),
+    constraint QUESTION_PK
+        primary key (ID)
+);
+
+
 ```
 
 

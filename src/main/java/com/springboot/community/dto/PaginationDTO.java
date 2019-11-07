@@ -21,29 +21,19 @@ public class PaginationDTO {
     private boolean showNext;//下一页
     private boolean showEndPage;//最后一页
     private Integer page;//当前页
-    private List<Integer> pages = new ArrayList<>();//所有页
+    private List<Integer> pages = new ArrayList<>();//所有页集合
     private Integer totalPage;//总共有多少个页面
 
-    public void setPagination(Integer totalCount, Integer page, Integer size) {
+    //totalCount为question表中的所有列数总和
+    public void setPagination(Integer totalPage, Integer page) {
 
-        //总共有多少个页面
-        if (totalCount % size == 0) {
-            totalPage = totalCount / size;
-        } else {
-            totalPage = totalCount / size + 1;
-        }
-        if(page<1){
-            page=1;
-        }
-        if (page>totalPage){
-            page=totalPage;
-        }
-        this.page=page;
+        this.totalPage = totalPage;
+        this.page = page;
         pages.add(page);
         for (int i = 1; i <= 3; i++) {
             //往前头部插入
             if (page - i > 0) {
-                pages.add(0,page - i);
+                pages.add(0, page - i);
             }
             //往后尾部插入
             if (page + i <= totalPage) {
