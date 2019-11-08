@@ -25,6 +25,7 @@ public class ProfileController {
     private UserMapper userMapper;
     @Autowired
     private QuestionService questionService;
+    /*我的问题*/
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action") String action,
                           //分页 第1页为主  默认5个数据

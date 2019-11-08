@@ -23,7 +23,7 @@ public class PaginationDTO {
     private Integer page;//当前页
     private List<Integer> pages = new ArrayList<>();//所有页集合
     private Integer totalPage;//总共有多少个页面
-
+    /*分页*/
     //totalCount为question表中的所有列数总和
     public void setPagination(Integer totalPage, Integer page) {
 

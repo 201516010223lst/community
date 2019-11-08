@@ -25,7 +25,7 @@ public class indexController {
 
     @Autowired
     private QuestionService questionService;
-
+    /*主页*/
     @GetMapping("/")
     public String index(HttpServletRequest request,
                         Model model,

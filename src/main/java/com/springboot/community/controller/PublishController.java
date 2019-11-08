@@ -1,13 +1,16 @@
 package com.springboot.community.controller;
 
+import com.springboot.community.dto.QuestionDTO;
 import com.springboot.community.mapper.QuestionMapper;
 import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.Question;
 import com.springboot.community.model.User;
+import com.springboot.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,10 +26,18 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class PublishController {
     @Autowired
-    private QuestionMapper questionMapper;
-
-    @Autowired
-    private UserMapper userMapper;
+    private QuestionService questionService;
+    /*编辑问题 根据question id来查找*/
+    @GetMapping("publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                       Model model) {
+        QuestionDTO question = questionService.getById(id);
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());
+        return "publish";
+    }
 
     @GetMapping("/publish")
     /*@GetMapping用于将Http Get 请求映射到特定处理程序方法的注释*/
@@ -36,6 +47,7 @@ public class PublishController {
     }
 
     /*接收前端页面传过来的参数，请求方式为post*/
+    /*发布问题界面*/
     @PostMapping("/publish")
     /*@PostMapping用于将Http Post 请求映射到特定处理程序方法的注释。是@RequestMapping(method = RequestMethod.POST)的缩写。
     method=RequestMethod.POST：只接受post请求，其他的不行，如果接收的不是post请求会405报错*/
@@ -43,6 +55,7 @@ public class PublishController {
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "id", required = false) Integer id,
             HttpServletRequest request,
             Model model
     ) {
@@ -66,27 +79,6 @@ public class PublishController {
             return "publish";
         }
         /*判断用户是否登录*/
-      /*  User user = null;
-        //获取cookie，循环cookie是否找到自定义的token
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0) {//先判断cookies是否为空，否则会报空指针错误
-            for (Cookie cookie : cookies) {
-                if ("token".equals(cookie.getName())) {
-                    //拿到这个cookie
-                    String token = cookie.getValue();
-//                System.out.println(token);
-                    //在数据库里面查是不是有这个记录
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        //user不为空，把user放到session中，在前端页面是否展示我还是登陆
-//                    System.out.println("查询的token: "+user.getToken());
-//                    System.out.println(user);
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }*/
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             model.addAttribute("error", "用户未登录");
@@ -97,10 +89,9 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
-        question.setGmtCreate(System.currentTimeMillis());
-        question.setGmtModified(question.getGmtCreate());
-        /*把问题等信息写到数据库中*/
-        questionMapper.create(question);
+        question.setId(id);
+        /*创建或者更新*/
+        questionService.createOrUpdate(question);
         return "redirect:/";
     }
 }

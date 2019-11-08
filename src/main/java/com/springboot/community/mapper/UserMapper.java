@@ -24,10 +24,10 @@ public interface UserMapper {
     /*通过id关联*/
     @Select("select * from user where id = #{id}")
     User findById(@Param("id") Integer id);
-
+    /*通过user表id查找*/
     @Select("select * from user where account_id = #{accountId}")
     User findByAccountId(@Param("accountId") String accountId);
-
+    /*更新问题*/
     @Update("update user set name=#{name},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where id=#{id}")
     void update(User user);
 }
