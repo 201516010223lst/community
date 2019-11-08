@@ -3,10 +3,7 @@ package com.springboot.community.mapper;
 
 import com.springboot.community.model.User;
 import jdk.nashorn.internal.parser.Token;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 /**
  * @Classname UserMapper
@@ -27,4 +24,10 @@ public interface UserMapper {
     /*通过id关联*/
     @Select("select * from user where id = #{id}")
     User findById(@Param("id") Integer id);
+
+    @Select("select * from user where account_id = #{accountId}")
+    User findByAccountId(@Param("accountId") String accountId);
+
+    @Update("update user set name=#{name},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where id=#{id}")
+    void update(User user);
 }
