@@ -2,6 +2,8 @@ package com.springboot.community.service;
 
 import com.springboot.community.dto.PaginationDTO;
 import com.springboot.community.dto.QuestionDTO;
+import com.springboot.community.exception.CustomizeErrorCode;
+import com.springboot.community.exception.CustomizeException;
 import com.springboot.community.mapper.QuestionMapper;
 import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.Question;
@@ -34,7 +36,7 @@ public class QuestionService {
         /*拿到所有question表中所有列数*/
 
         Integer totalPage;
-        Integer totalCount = (int)questionMapper.countByExample(new QuestionExample());
+        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
         //总共有多少个页面
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -78,7 +80,7 @@ public class QuestionService {
         /*拿到所有question表中所有列数*/
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(userId);
-        Integer totalCount = (int)questionMapper.countByExample(questionExample);
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
         Integer totalPage;
         //总共有多少个页面
         if (totalCount % size == 0) {
@@ -123,6 +125,9 @@ public class QuestionService {
     public QuestionDTO getById(Integer id) {
         /*通过 id查找到问题*/
         Question question = questionMapper.selectByPrimaryKey(id);
+        if (question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         //BeanUtils.copyProperties(A,B);快速将A的属性拷贝到B上面
         BeanUtils.copyProperties(question, questionDTO);
@@ -130,14 +135,15 @@ public class QuestionService {
         questionDTO.setUser(user);
         return questionDTO;
     }
+
     /*创建或者更新问题*/
     public void createOrUpdate(Question question) {
-        if (question.getId()==null) {
+        if (question.getId() == null) {
             /*插入问题*/
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insert(question);
-        }else{
+        } else {
             /*更新问题*/
             Question updateQuestion = new Question();
             updateQuestion.setGmtModified(System.currentTimeMillis());
@@ -146,7 +152,10 @@ public class QuestionService {
             updateQuestion.setTag(question.getTag());
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, questionExample);
+            if (updated == 1) {//判断是否更新
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
