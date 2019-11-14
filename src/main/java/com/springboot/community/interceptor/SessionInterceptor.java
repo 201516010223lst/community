@@ -2,6 +2,7 @@ package com.springboot.community.interceptor;
 
 import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.User;
+import com.springboot.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 
 /**
@@ -35,12 +37,15 @@ public class SessionInterceptor implements HandlerInterceptor {
                     String token = cookie.getValue();
 //                System.out.println(token);
                     //在数据库里面查是不是有这个记录
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> users = userMapper.selectByExample(userExample);
+                    /*User user = userMapper.findByToken(token);*/
+                    if (users.size() != 0) {
                         //user不为空，把user放到session中，在前端页面是否展示我还是登陆
 //                    System.out.println("查询的token: "+user.getToken());
 //                    System.out.println(user);
-                        request.getSession().setAttribute("user", user);
+                        request.getSession().setAttribute("user", users.get(0));
                     }
                     break;
                 }
