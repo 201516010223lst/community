@@ -10,6 +10,7 @@ import lombok.Data;
  * @Created by 猪刚鬣·李
  */
 @Data
+/*QuestionDTO*/
 public class QuestionDTO {
     private Integer id;//问题id
     private String title;//问题标题

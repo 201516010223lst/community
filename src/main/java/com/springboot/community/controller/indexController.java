@@ -25,16 +25,17 @@ public class indexController {
 
     @Autowired
     private QuestionService questionService;
+
     /*主页*/
     @GetMapping("/")
     public String index(HttpServletRequest request,
                         Model model,
                         //分页 第1页为主  默认5个数据
-                        @RequestParam(name = "page",defaultValue ="1") Integer page,
-                        @RequestParam(name = "size",defaultValue ="5") Integer size
-                        ) {
+                        @RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "5") Integer size
+    ) {
         //分页
-        PaginationDTO pagination = questionService.list(page,size);
+        PaginationDTO pagination = questionService.list(page, size);
         model.addAttribute("pagination", pagination);
         return "index";
     }

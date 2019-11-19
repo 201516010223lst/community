@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @Created by 猪刚鬣·李
  */
 @Controller
+/*QuestionController*/
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -24,6 +25,8 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Integer id,
                            Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
+        //通过id来累加阅读数
+        questionService.incView(id);
         model.addAttribute("question",questionDTO);
         return "question";
     }

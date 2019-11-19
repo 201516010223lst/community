@@ -25,14 +25,15 @@ public class ProfileController {
     private UserMapper userMapper;
     @Autowired
     private QuestionService questionService;
+
     /*我的问题*/
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action") String action,
                           //分页 第1页为主  默认5个数据
-                          @RequestParam(name = "page",defaultValue ="1") Integer page,
-                          @RequestParam(name = "size",defaultValue ="5") Integer size,
+                          @RequestParam(name = "page", defaultValue = "1") Integer page,
+                          @RequestParam(name = "size", defaultValue = "5") Integer size,
                           HttpServletRequest request,
-                          Model model){
+                          Model model) {
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             return "redirect:/";
@@ -47,7 +48,7 @@ public class ProfileController {
         }
 //       通过用户id查找把用户提的问题发送到前端页面
         PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
-        model.addAttribute("pagination",paginationDTO);
+        model.addAttribute("pagination", paginationDTO);
         return "profile";
     }
 }

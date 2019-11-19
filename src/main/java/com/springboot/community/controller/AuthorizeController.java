@@ -45,6 +45,7 @@ public class AuthorizeController {
 
     @Autowired
     private UserService userService;
+
     /*登录*/
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
@@ -86,14 +87,15 @@ public class AuthorizeController {
             return "redirect:/";
         }
     }
+
     /*退出登录*/
     @GetMapping("/logout")
     public String logout(HttpServletRequest request,
-                         HttpServletResponse response){
+                         HttpServletResponse response) {
         /*清除session*/
         request.getSession().removeAttribute("user");
         /*清除cookie*/
-        Cookie cookie=new Cookie("token",null);
+        Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return "redirect:/";

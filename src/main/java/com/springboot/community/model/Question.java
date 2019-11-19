@@ -1,5 +1,5 @@
 package com.springboot.community.model;
-
+/*mybatis generator集成的Question*/
 public class Question {
     /**
      *

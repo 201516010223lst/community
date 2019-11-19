@@ -9,6 +9,7 @@ import lombok.Data;
  * @Created by 猪刚鬣·李
  */
 @Data
+/*AccessTokenDTO*/
 public class AccessTokenDTO {
     private String client_id;
     private String client_secret;

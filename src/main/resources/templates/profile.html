@@ -3,7 +3,7 @@
 <head>
     <!--/*@thymesVar id="sectionName" type="ch"*/-->
     <title th:text="${sectionName}"></title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <!--<link rel="stylesheet" href="../static/css/community.css">-->
@@ -21,12 +21,14 @@
             <div class="media" th:each="question : ${pagination.questions}">
                 <div class="media-left">
                     <a href="#">
-                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}" >
+                        <img class="media-object img-rounded" th:src="${question.user.avatarUrl}">
                     </a>
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading" th:text="${question.title}"></h4>
-                    <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span></span>
+                    <span class="text-desc"><span th:text="${question.commentCount}"></span> 个回复 • <span
+                            th:text="${question.viewCount}"></span> 次浏览 • <span
+                            th:text="${#dates.format(question.getGmtCreate(),'yyyy-MM-dd HH:mm')}"></span></span>
                 </div>
             </div>
             <nav aria-label="Page navigation">
@@ -61,8 +63,9 @@
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="list-group section" style="margin-top: 15px">
-                <a href="/profile/questions"  th:class="${section=='questions'?'active list-group-item':'list-group-item'}">我的问题</a>
-                <a href="/profile/replies"  th:class="${section=='replies'?'active list-group-item':'list-group-item'}">
+                <a href="/profile/questions"
+                   th:class="${section=='questions'?'active list-group-item':'list-group-item'}">我的问题</a>
+                <a href="/profile/replies" th:class="${section=='replies'?'active list-group-item':'list-group-item'}">
                     问题回复
                     <span class="badge">14</span></a>
             </div>

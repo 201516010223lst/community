@@ -16,6 +16,7 @@ import java.io.IOException;
  */
 /*获取github用户*/
 @Component
+/*获取github用户*/
 public class GithubProvider {
     /*获取GitHub app的access_token*/
     public String getAccessToken(AccessTokenDTO accessTokenDTO) {

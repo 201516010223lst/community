@@ -4,6 +4,7 @@ import com.springboot.community.dto.PaginationDTO;
 import com.springboot.community.dto.QuestionDTO;
 import com.springboot.community.exception.CustomizeErrorCode;
 import com.springboot.community.exception.CustomizeException;
+import com.springboot.community.mapper.QuestionExtMapper;
 import com.springboot.community.mapper.QuestionMapper;
 import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.Question;
@@ -29,6 +30,8 @@ public class QuestionService {
     private QuestionMapper questionMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         //创建一个分页DTO对象
@@ -157,5 +160,14 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void incView(Integer id) {
+        Question question = new Question();
+        /*查找到和数据库中相同的id*/
+        question.setId(id);
+        /*阅读数累加*/
+        question.setViewCount(1);
+        questionExtMapper.incView(question);
     }
 }

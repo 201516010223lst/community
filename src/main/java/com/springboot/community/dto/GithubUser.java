@@ -9,6 +9,7 @@ import lombok.Data;
  * @Created by 猪刚鬣·李
  */
 @Data
+/*GithubUser*/
 public class GithubUser {
     /*GitHub登录用户信息*/
     private String name;//github用户名

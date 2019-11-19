@@ -1,8 +1,6 @@
 package com.springboot.community.controller;
 
 import com.springboot.community.dto.QuestionDTO;
-import com.springboot.community.mapper.QuestionMapper;
-import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.Question;
 import com.springboot.community.model.User;
 import com.springboot.community.service.QuestionService;
@@ -27,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PublishController {
     @Autowired
     private QuestionService questionService;
-    /*编辑问题 根据question id来查找*/
+    /*编辑\更新问题 根据question id来查找*/
     @GetMapping("publish/{id}")
     public String edit(@PathVariable(name = "id") Integer id,
                        Model model) {

@@ -14,6 +14,7 @@ import java.util.List;
  * @Created by 猪刚鬣·李
  */
 @Data
+/*PaginationDTO*/
 public class PaginationDTO {
     private List<QuestionDTO> questions;/*问题列表*/
     private boolean showPrevious;//前一页
