@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 /**
  * @Classname CommentController
  * @Description TODO
@@ -21,7 +23,7 @@ public class CommentController {
 
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
-    public Object post(@RequestBody CommentDTO commentDTO) {
+    public Object post(/*@RequestBody*/ CommentDTO commentDTO) {
         Comment comment = new Comment();
         comment.setParentId(commentDTO.getParentId());
         comment.setContent(commentDTO.getContent());
@@ -31,6 +33,8 @@ public class CommentController {
         comment.setLikeCount(0L);
         comment.setCommentator(1);
         commentMapper.insert(comment);
-        return null;
+        HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
+        objectObjectHashMap.put("message","成功");
+        return objectObjectHashMap;
     }
 }
