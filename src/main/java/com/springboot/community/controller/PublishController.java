@@ -27,7 +27,7 @@ public class PublishController {
     private QuestionService questionService;
     /*编辑\更新问题 根据question id来查找*/
     @GetMapping("publish/{id}")
-    public String edit(@PathVariable(name = "id") Integer id,
+    public String edit(@PathVariable(name = "id") Long id,
                        Model model) {
         QuestionDTO question = questionService.getById(id);
         model.addAttribute("title", question.getTitle());
@@ -53,7 +53,7 @@ public class PublishController {
             @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "description", required = false) String description,
             @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "id", required = false) Integer id,
+            @RequestParam(value = "id", required = false) Long id,
             HttpServletRequest request,
             Model model
     ) {
@@ -78,6 +78,7 @@ public class PublishController {
         }
         /*判断用户是否登录*/
         User user = (User) request.getSession().getAttribute("user");
+        //String contentType = request.getContentType();
         if (user == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";

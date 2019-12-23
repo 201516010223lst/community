@@ -20,16 +20,13 @@ import javax.servlet.http.HttpServletRequest;
 //主页控制层
 @Controller
 public class indexController {
-    @Autowired
-    private UserMapper userMapper;
 
     @Autowired
     private QuestionService questionService;
 
     /*主页*/
     @GetMapping("/")
-    public String index(HttpServletRequest request,
-                        Model model,
+    public String index(Model model,
                         //分页 第1页为主  默认5个数据
                         @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size
