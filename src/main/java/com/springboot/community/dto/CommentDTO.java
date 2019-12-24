@@ -1,16 +1,17 @@
 package com.springboot.community.dto;
 
+import com.springboot.community.model.User;
 import lombok.Data;
 
-/**
- * @Classname CommentDTO
- * @Description TODO
- * @Date 2019/11/19 17:07
- * @Created by 猪刚鬣·李
- */
 @Data
 public class CommentDTO {
+    private Long id;
     private Long parentId;
-    private String content;
     private Integer type;
+    private Long commentator;
+    private Long gmtCreate;
+    private Long gmtModified;
+    private Long likeCount;
+    private String content;
+    private User user;
 }

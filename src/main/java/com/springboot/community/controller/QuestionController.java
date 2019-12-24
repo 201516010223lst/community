@@ -1,12 +1,17 @@
 package com.springboot.community.controller;
 
+import com.springboot.community.dto.CommentCreateDTO;
+import com.springboot.community.dto.CommentDTO;
 import com.springboot.community.dto.QuestionDTO;
+import com.springboot.community.service.CommentService;
 import com.springboot.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.List;
 
 /**
  * @Classname QuestionController
@@ -19,15 +24,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/question/{id}")
     /*问题编辑*/
     public String question(@PathVariable(name = "id") Long id,
                            Model model) {
         QuestionDTO questionDTO = questionService.getById(id);
+        List<CommentDTO> comments = commentService.ListByQuestionId(id);
         //通过id来累加阅读数
         questionService.incView(id);
-        model.addAttribute("question",questionDTO);
+        model.addAttribute("question", questionDTO);
+        model.addAttribute("comments",comments);
         return "question";
     }
 }
