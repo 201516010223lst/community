@@ -9,6 +9,16 @@
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
+<script type="application/javascript">
+
+    var closable = window.localStorage.getItem("closable");
+    if (closable){
+        //关闭窗口
+        window.close();
+        //清除缓存
+        window.localStorage.clear("closable");
+    }
+</script>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main">
