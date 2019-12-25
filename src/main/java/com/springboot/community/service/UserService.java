@@ -19,7 +19,7 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    /*发布或者更新问题*/
+    /*添加或者更新用户*/
     public void createOrUpdate(User user) {
         /*先去数据库里面查询是不是有这个user的id*/
         UserExample userExample = new UserExample();

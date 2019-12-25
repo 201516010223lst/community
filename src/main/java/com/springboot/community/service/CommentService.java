@@ -36,6 +36,7 @@ public class CommentService {
     private UserMapper userMapper;
 
     @Transactional/*事务处理*/
+    //增加回复/评论
     public void insert(Comment comment) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
@@ -62,11 +63,14 @@ public class CommentService {
         }
     }
 
+    //  问题/评论回复列表
     public List<CommentDTO> ListByQuestionId(Long id) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
                 .andParentIdEqualTo(id)
                 .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        //按最新时间排序
+        commentExample.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         if (comments.size() == 0) {
             return new ArrayList<>();
@@ -85,7 +89,7 @@ public class CommentService {
         //转换comment为commentDTO
         List<CommentDTO> commentDTOs = comments.stream().map(comment -> {
             CommentDTO commentDTO = new CommentDTO();
-            BeanUtils.copyProperties(comment,commentDTO);
+            BeanUtils.copyProperties(comment, commentDTO);
             commentDTO.setUser(userMap.get(comment.getCommentator()));
             return commentDTO;
         }).collect(Collectors.toList());

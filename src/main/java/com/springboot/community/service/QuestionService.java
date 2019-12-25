@@ -33,6 +33,7 @@ public class QuestionService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
+    //分页列表
     public PaginationDTO list(Integer page, Integer size) {
         //创建一个分页DTO对象
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -78,11 +79,13 @@ public class QuestionService {
         return paginationDTO;
     }
 
+    //  我的问题列表
     public PaginationDTO list(Long userId, Integer page, Integer size) {
         PaginationDTO paginationDTO = new PaginationDTO();
         /*拿到所有question表中所有列数*/
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(userId);
+        questionExample.setOrderByClause("gmt_create desc");
         Integer totalCount = (int) questionMapper.countByExample(questionExample);
         Integer totalPage;
         //总共有多少个页面
@@ -159,12 +162,14 @@ public class QuestionService {
             QuestionExample questionExample = new QuestionExample();
             questionExample.createCriteria().andIdEqualTo(question.getId());
             int updated = questionMapper.updateByExampleSelective(updateQuestion, questionExample);
-            if (updated == 1) {//判断是否更新
+            //判断是否更新
+            if (updated == 1) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
     }
 
+    //阅读数累加
     public void incView(Long id) {
         Question question = new Question();
         /*查找到和数据库中相同的id*/

@@ -16,6 +16,9 @@ body {
     width: 38px;
     height: 38px;
 }
+.question_title{
+    margin-top: 25px;
+}
 
 .media-body {
     padding-top: 10px;
