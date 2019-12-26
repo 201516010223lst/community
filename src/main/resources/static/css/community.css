@@ -50,6 +50,14 @@ body {
 .question-wechat {
     width: 100%;
 }
+.publish-tag-tag{
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+.publish-tag-tag .label-info{
+    margin-right: 10px;
+}
 
 .community-menu {
     display: block;
