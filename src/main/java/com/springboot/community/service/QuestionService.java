@@ -85,7 +85,7 @@ public class QuestionService {
         /*拿到所有question表中所有列数*/
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(userId);
-        questionExample.setOrderByClause("gmt_create desc");
+        //questionExample.setOrderByClause("gmt_create desc");
         Integer totalCount = (int) questionMapper.countByExample(questionExample);
         Integer totalPage;
         //总共有多少个页面

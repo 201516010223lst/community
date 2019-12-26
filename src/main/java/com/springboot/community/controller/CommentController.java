@@ -1,7 +1,9 @@
 package com.springboot.community.controller;
 
 import com.springboot.community.dto.CommentCreateDTO;
+import com.springboot.community.dto.CommentDTO;
 import com.springboot.community.dto.ResultDTO;
+import com.springboot.community.enums.CommentTypeEnum;
 import com.springboot.community.exception.CustomizeErrorCode;
 import com.springboot.community.model.Comment;
 import com.springboot.community.model.User;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @Classname CommentController
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 /*回复*/
 public class CommentController {
+
     @Autowired
     private CommentService commentService;
 
@@ -52,5 +56,12 @@ public class CommentController {
         objectObjectHashMap.put("message", "成功");
         return objectObjectHashMap;*/
         return ResultDTO.okOf();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO<List<CommentDTO>> comments(@PathVariable(name = "id") Long id) {
+        List<CommentDTO> commentDTOS = commentService.listByTargetId(id, CommentTypeEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOS);
     }
 }

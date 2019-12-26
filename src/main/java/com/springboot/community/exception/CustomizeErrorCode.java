@@ -1,7 +1,5 @@
 package com.springboot.community.exception;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 /**
  * @Classname CustomizeErrorCode
  * @Description TODO
