@@ -10,13 +10,16 @@ import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.Question;
 import com.springboot.community.model.QuestionExample;
 import com.springboot.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Classname QuestionService
@@ -60,7 +63,10 @@ public class QuestionService {
         //偏移量size*(page-1)
         Integer offset = size * (page - 1);//偏移量  size为每一页显示有多少条数据
         //把查找到的问题列表数据放到list中  offset偏移量  size为每一页有多少条数据;
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
+        /* List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));*/
         //创建一个问题DTO
         List<QuestionDTO> questionDTOList = new ArrayList<>();
         //循环问题
@@ -177,5 +183,23 @@ public class QuestionService {
         /*阅读数累加*/
         question.setViewCount(1);
         questionExtMapper.incView(question);
+    }
+    //相关问题
+    public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
+        if (StringUtils.isBlank(queryDTO.getTag())) {
+            new ArrayList<>();
+        }
+        String[] tags = StringUtils.split(queryDTO.getTag(), ",");
+        String regexpTag = Arrays.stream(tags).collect(Collectors.joining("|"));
+        Question question = new Question();
+        question.setId(queryDTO.getId());
+        question.setTag(regexpTag);
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        List<QuestionDTO> questionDTOs = questions.stream().map(q -> {
+            QuestionDTO questionDTO = new QuestionDTO();
+            BeanUtils.copyProperties(q,questionDTO);
+            return questionDTO;
+        }).collect(Collectors.toList());
+        return questionDTOs;
     }
 }
