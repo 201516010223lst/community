@@ -91,6 +91,7 @@ public class QuestionService {
         /*拿到所有question表中所有列数*/
         QuestionExample questionExample = new QuestionExample();
         questionExample.createCriteria().andCreatorEqualTo(userId);
+        questionExample.setOrderByClause("gmt_create desc");
         //questionExample.setOrderByClause("gmt_create desc");
         Integer totalCount = (int) questionMapper.countByExample(questionExample);
         Integer totalPage;
@@ -115,6 +116,7 @@ public class QuestionService {
         //把查找到的问题列表数据放到list中  offset偏移量  size为每一页有多少条数据
         QuestionExample example = new QuestionExample();
         example.createCriteria().andCreatorEqualTo(userId);
+        example.setOrderByClause("gmt_create desc");
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
         //创建一个问题DTO
         List<QuestionDTO> questionDTOList = new ArrayList<>();

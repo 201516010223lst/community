@@ -39,12 +39,12 @@ public class ProfileController {
         if ("questions".equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
-//            PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
+        //            PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
         } else if ("replies".equals(action)) {
             model.addAttribute("section", "replies");
             model.addAttribute("sectionName", "最新回复");
         }
-//       通过用户id查找把用户提的问题发送到前端页面
+        //       通过用户id查找把用户提的问题发送到前端页面
         PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
         model.addAttribute("pagination", paginationDTO);
         return "profile";
