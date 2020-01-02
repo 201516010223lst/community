@@ -3,6 +3,7 @@ package com.springboot.community.controller;
 import com.springboot.community.dto.PaginationDTO;
 import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.User;
+import com.springboot.community.service.NotificationService;
 import com.springboot.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 public class ProfileController {
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private NotificationService notificationService;
 
     /*我的问题*/
     @GetMapping("/profile/{action}")
@@ -37,16 +40,21 @@ public class ProfileController {
             return "redirect:/";
         }
         if ("questions".equals(action)) {
+            //       通过用户id查找把用户提的问题发送到前端页面
+            PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
+            model.addAttribute("pagination", paginationDTO);
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
         //            PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
         } else if ("replies".equals(action)) {
+            PaginationDTO paginationDTO = notificationService.list(user.getId(), page, size);
+            Long unreadCount = notificationService.unreadCount(user.getId());
             model.addAttribute("section", "replies");
+            model.addAttribute("pagination", paginationDTO);
+            model.addAttribute("unreadCount", unreadCount);
             model.addAttribute("sectionName", "最新回复");
         }
-        //       通过用户id查找把用户提的问题发送到前端页面
-        PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
-        model.addAttribute("pagination", paginationDTO);
+
         return "profile";
     }
 }

@@ -2,6 +2,8 @@ package com.springboot.community.service;
 
 import com.springboot.community.dto.CommentDTO;
 import com.springboot.community.enums.CommentTypeEnum;
+import com.springboot.community.enums.NotificationStatusEnum;
+import com.springboot.community.enums.NotificationTypeEnum;
 import com.springboot.community.exception.CustomizeErrorCode;
 import com.springboot.community.exception.CustomizeException;
 import com.springboot.community.mapper.*;
@@ -19,7 +21,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class CommentService {
-
     @Autowired
     private CommentMapper commentMapper;
 
@@ -28,14 +29,18 @@ public class CommentService {
 
     @Autowired
     private QuestionExtMapper questionExtMapper;
+
     @Autowired
     private UserMapper userMapper;
+
     @Autowired
     private CommentExtMapper commentExtMapper;
 
-    @Transactional/*事务处理*/
-    //增加回复/评论
-    public void insert(Comment comment) {
+    @Autowired
+    private NotificationMapper notificationMapper;
+
+    @Transactional
+    public void insert(Comment comment, User commentator) {
         if (comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
         }
@@ -48,15 +53,25 @@ public class CommentService {
             if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+
+            // 回复问题
+            Question question = questionMapper.selectByPrimaryKey(dbComment.getParentId());
+            if (question == null) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+
             commentMapper.insert(comment);
-            //增加评论数
+
+            // 增加评论数
             Comment parentComment = new Comment();
             parentComment.setId(comment.getParentId());
             parentComment.setCommentCount(1);
             commentExtMapper.incCommentCount(parentComment);
 
+            // 创建通知
+            createNotify(comment, dbComment.getCommentator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_COMMENT, question.getId());
         } else {
-            //回复问题
+            // 回复问题
             Question question = questionMapper.selectByPrimaryKey(comment.getParentId());
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -64,23 +79,37 @@ public class CommentService {
             commentMapper.insert(comment);
             question.setCommentCount(1);
             questionExtMapper.incCommentCount(question);
+
+            // 创建通知
+            createNotify(comment, question.getCreator(), commentator.getName(), question.getTitle(), NotificationTypeEnum.REPLY_QUESTION, question.getId());
         }
     }
 
-    //  问题/评论回复列表
+    private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long outerId) {
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setType(notificationType.getType());
+        notification.setOuterid(outerId);
+        notification.setNotifier(comment.getCommentator());
+        notification.setStatus(NotificationStatusEnum.UNREAD.getStatus());
+        notification.setReceiver(receiver);
+        notification.setNotifierName(notifierName);
+        notification.setOuterTitle(outerTitle);
+        notificationMapper.insert(notification);
+    }
+
     public List<CommentDTO> listByTargetId(Long id, CommentTypeEnum type) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
                 .andParentIdEqualTo(id)
                 .andTypeEqualTo(type.getType());
-        //按最新时间排序
         commentExample.setOrderByClause("gmt_create desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
+
         if (comments.size() == 0) {
             return new ArrayList<>();
         }
         // 获取去重的评论人
-        //Java 8 stream()流编程
         Set<Long> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
         List<Long> userIds = new ArrayList();
         userIds.addAll(commentators);
