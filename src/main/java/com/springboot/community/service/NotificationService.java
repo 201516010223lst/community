@@ -2,21 +2,22 @@ package com.springboot.community.service;
 
 import com.springboot.community.dto.NotificationDTO;
 import com.springboot.community.dto.PaginationDTO;
-import com.springboot.community.dto.QuestionDTO;
 import com.springboot.community.enums.NotificationStatusEnum;
 import com.springboot.community.enums.NotificationTypeEnum;
 import com.springboot.community.exception.CustomizeErrorCode;
 import com.springboot.community.exception.CustomizeException;
 import com.springboot.community.mapper.NotificationMapper;
-import com.springboot.community.mapper.UserMapper;
-import com.springboot.community.model.*;
+import com.springboot.community.model.Notification;
+import com.springboot.community.model.NotificationExample;
+import com.springboot.community.model.User;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service
 public class NotificationService {
@@ -49,12 +50,12 @@ public class NotificationService {
 
         paginationDTO.setPagination(totalPage, page);
 
-        //size*(page-1)
+        //
         Integer offset = size * (page - 1);
         NotificationExample example = new NotificationExample();
         example.createCriteria()
                 .andReceiverEqualTo(userId);
-
+        example.setOrderByClause("gmt_create desc");
         List<Notification> notifications = notificationMapper.selectByExampleWithRowbounds(example, new RowBounds(offset, size));
 
         if (notifications.size() == 0) {

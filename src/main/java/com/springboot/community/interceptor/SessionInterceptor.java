@@ -3,6 +3,7 @@ package com.springboot.community.interceptor;
 import com.springboot.community.mapper.UserMapper;
 import com.springboot.community.model.User;
 import com.springboot.community.model.UserExample;
+import com.springboot.community.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -25,6 +26,8 @@ import java.util.List;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -46,6 +49,8 @@ public class SessionInterceptor implements HandlerInterceptor {
 //                    System.out.println("查询的token: "+user.getToken());
 //                    System.out.println(user);
                         request.getSession().setAttribute("user", users.get(0));
+                        Long unreadCount = notificationService.unreadCount(users.get(0).getId());
+                        request.getSession().setAttribute("unreadCount",unreadCount);
                     }
                     break;
                 }
