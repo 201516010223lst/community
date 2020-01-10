@@ -2,6 +2,7 @@ package com.springboot.community.service;
 
 import com.springboot.community.dto.PaginationDTO;
 import com.springboot.community.dto.QuestionDTO;
+import com.springboot.community.dto.QuestionQueryDTO;
 import com.springboot.community.exception.CustomizeErrorCode;
 import com.springboot.community.exception.CustomizeException;
 import com.springboot.community.mapper.QuestionExtMapper;
@@ -37,13 +38,19 @@ public class QuestionService {
     private QuestionExtMapper questionExtMapper;
 
     //分页列表
-    public PaginationDTO list(Integer page, Integer size) {
+    public PaginationDTO list(String search, Integer page, Integer size) {
+        if (StringUtils.isNotBlank(search)) {
+            String[] tags = StringUtils.split(search, " ");
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
         //创建一个分页DTO对象
         PaginationDTO paginationDTO = new PaginationDTO();
         /*拿到所有question表中所有列数*/
 
         Integer totalPage;
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCount = questionExtMapper.countBySearch(questionQueryDTO);
         //总共有多少个页面
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -65,7 +72,9 @@ public class QuestionService {
         //把查找到的问题列表数据放到list中  offset偏移量  size为每一页有多少条数据;
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
+        questionQueryDTO.setSize(size);
+        questionQueryDTO.setPage(offset);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         /* List<Question> questions = questionMapper.selectByExampleWithRowbounds(new QuestionExample(), new RowBounds(offset, size));*/
         //创建一个问题DTO
         List<QuestionDTO> questionDTOList = new ArrayList<>();
@@ -171,7 +180,7 @@ public class QuestionService {
             questionExample.createCriteria().andIdEqualTo(question.getId());
             int updated = questionMapper.updateByExampleSelective(updateQuestion, questionExample);
             //判断是否更新
-            if (updated == 1) {
+            if (updated != 1) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
@@ -186,6 +195,7 @@ public class QuestionService {
         question.setViewCount(1);
         questionExtMapper.incView(question);
     }
+
     //相关问题
     public List<QuestionDTO> selectRelated(QuestionDTO queryDTO) {
         if (StringUtils.isBlank(queryDTO.getTag())) {
@@ -199,7 +209,7 @@ public class QuestionService {
         List<Question> questions = questionExtMapper.selectRelated(question);
         List<QuestionDTO> questionDTOs = questions.stream().map(q -> {
             QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(q,questionDTO);
+            BeanUtils.copyProperties(q, questionDTO);
             return questionDTO;
         }).collect(Collectors.toList());
         return questionDTOs;
