@@ -7,6 +7,7 @@ import com.springboot.community.model.User;
 import com.springboot.community.provider.GithubProvider;
 import com.springboot.community.service.UserService;
 import jdk.nashorn.internal.parser.Token;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,7 @@ import java.util.UUID;
  */
 //用户登录控制层
 @Controller
+@Slf4j
 public class AuthorizeController {
     /*自动识别spring容器*/
     @Autowired
@@ -81,6 +83,7 @@ public class AuthorizeController {
             return "redirect:/";
         } else {
             //登陆失败，重新登录
+            log.error("callback get github error {}", githubUser);
             return "redirect:/";
         }
     }
