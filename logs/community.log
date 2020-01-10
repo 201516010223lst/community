@@ -1,0 +1,19 @@
+2020-01-10 14:34:54.584  INFO 31420 --- [main] c.s.community.CommunityApplication       : Starting CommunityApplication on LAPTOP-REUO3QGM with PID 31420 (E:\IdeaProjects\community\target\classes started by suppo in E:\IdeaProjects\community)
+2020-01-10 14:34:54.587  INFO 31420 --- [main] c.s.community.CommunityApplication       : No active profile set, falling back to default profiles: default
+2020-01-10 14:34:54.720  INFO 31420 --- [main] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2020-01-10 14:34:54.720  INFO 31420 --- [main] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2020-01-10 14:34:54.733  WARN 31420 --- [background-preinit] o.s.h.c.j.Jackson2ObjectMapperBuilder    : For Jackson Kotlin classes support please add "com.fasterxml.jackson.module:jackson-module-kotlin" to the classpath
+2020-01-10 14:34:57.666  INFO 31420 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8887 (http)
+2020-01-10 14:34:57.800  INFO 31420 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-01-10 14:34:57.802  INFO 31420 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.26]
+2020-01-10 14:34:57.818  INFO 31420 --- [main] o.a.catalina.core.AprLifecycleListener   : Loaded APR based Apache Tomcat Native library [1.2.23] using APR version [1.7.0].
+2020-01-10 14:34:57.818  INFO 31420 --- [main] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2020-01-10 14:34:57.819  INFO 31420 --- [main] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2020-01-10 14:34:57.827  INFO 31420 --- [main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1c  28 May 2019]
+2020-01-10 14:34:58.002  INFO 31420 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-01-10 14:34:58.003  INFO 31420 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 3280 ms
+2020-01-10 14:34:59.609  INFO 31420 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-01-10 14:34:59.761  INFO 31420 --- [main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2020-01-10 14:35:00.535  INFO 31420 --- [main] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2020-01-10 14:35:00.671  INFO 31420 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8887 (http) with context path ''
+2020-01-10 14:35:00.682  INFO 31420 --- [main] c.s.community.CommunityApplication       : Started CommunityApplication in 7.973 seconds (JVM running for 15.697)

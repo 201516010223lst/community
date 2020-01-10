@@ -43,7 +43,7 @@
     where id = #{id}
     </update>
     <select id="selectRelated" parameterType="com.springboot.community.model.Question" resultMap="BaseResultMap">
-        select * from QUESTION where ID != #{id} and tag regexp #{tag}
+       select * from QUESTION where id != #{id} and tag regexp #{tag}
     </select>
     <select id="countBySearch" parameterType="com.springboot.community.dto.QuestionQueryDTO"
             resultType="java.lang.Integer">
